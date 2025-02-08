@@ -60,6 +60,49 @@
 
 <script>
 
+  // Getting all the keys with class keys
+  const keys = document.querySelectorAll(".key");
+
+  function playSound(e)
+  {
+    // Selecting the audio button according to key
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+
+    // Getting the key which was pressed
+    const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+
+    // If no audio is present then just cancel all together
+    if (!audio) return;
+
+    // Adding the classlist for playing
+    key.classList.add("playing");
+
+    // Also resetting time of audio if its constantly pressed
+    audio.currentTime = 0;
+    
+    // Playing the audio file
+    audio.play();
+  }
+
+  function removeTransition(e)
+  {
+    // It's first gonna check if the property is not an transform
+    if (e.propertyName !== "transform") return;
+
+    // Removing this styling class from particular element
+    this.classList.remove("playing");
+  }
+
+  // Selecting for each key
+  keys.forEach(key => key.addEventListener("transitionend", removeTransition));
+
+  
+  // Adding an event listener to each button if key is pressed
+  window.addEventListener("keydown", playSound);
+
+
+
+
 </script>
 
 
