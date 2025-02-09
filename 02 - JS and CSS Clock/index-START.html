@@ -54,7 +54,7 @@
       position: relative;
       width: 100%;
       height: 100%;
-      transform: translateY(-3px); /* account for the height of the clock hands */
+      transform: translateY(-3px); /* Account for the height of the clock hands */
     }
 
     .hand {
@@ -62,6 +62,10 @@
       height: 6px;
       background: black;
       position: absolute;
+      transform: rotate(90deg);
+      transform-origin: 100%;
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0, 2.9, 0.58, 1);
       top: 50%;
     }
 
@@ -69,6 +73,42 @@
 
   <script>
 
+    // Off set of our clock cause of handing placement
+    const offSet = 90;
+
+    // Getting all the hands
+    const secondHand = document.querySelector(".second-hand");
+    const minHand = document.querySelector(".min-hand");
+    const hourHand = document.querySelector(".hour-hand");
+
+    // Function for getting the current time
+    function setDate()
+    {
+      // Getting the current date
+      const currentDate = new Date();
+
+      // Getting the current seconds minutes and hours from the current data
+      const seconds = currentDate.getSeconds();
+      const minutes = currentDate.getMinutes();
+      const hours = currentDate.getHours();
+
+      // Getting the hand degree to change from seconds minutes and hours
+      const secondsDegree = ((seconds / 60) * 360) + offSet;
+      const minutesDegree = ((minutes / 60) * 360) + offSet;
+      const hoursDegree = ((hours / 12) * 360) + offSet;
+
+      // Changing the seconds hand accordingly
+      secondHand.style.transform = `rotate(${secondsDegree}deg)`;
+      minHand.style.transform = `rotate(${minutesDegree}deg)`;
+      hourHand.style.transform = `rotate(${hoursDegree}deg)`;
+
+    }
+
+    // Calling the function constantly for every second
+    setInterval(setDate, 1000);
+
+    // Calling function first so it loads auto as program starts
+    setDate();
 
   </script>
 </body>
