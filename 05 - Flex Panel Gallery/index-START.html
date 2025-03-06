@@ -27,14 +27,18 @@
     .panels {
       min-height: 100vh;
       overflow: hidden;
+      display: flex;
     }
 
     .panel {
       background: #6B0F9C;
       box-shadow: inset 0 0 0 5px rgba(255,255,255,0.1);
       color: white;
+      display: flex;
+      flex-direction: column;
       text-align: center;
       align-items: center;
+      flex: 1;
       /* Safari transitionend event.propertyName === flex */
       /* Chrome + FF transitionend event.propertyName === flex-grow */
       transition:
@@ -46,19 +50,39 @@
       background-position: center;
     }
 
-    .panel1 { background-image:url(https://source.unsplash.com/gYl-UtwNg_I/1500x1500); }
-    .panel2 { background-image:url(https://source.unsplash.com/rFKUFzjPYiQ/1500x1500); }
+    .panel1 { background-image:url(https://i0.wp.com/farm4.static.flickr.com/3408/3410783929_051d93bc86.jpg); }
+    .panel2 { background-image:url(https://media-cdn.tripadvisor.com/media/photo-s/0c/ec/54/8b/random-nice-place-on.jpg); }
     .panel3 { background-image:url(https://images.unsplash.com/photo-1465188162913-8fb5709d6d57?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&cs=tinysrgb&w=1500&h=1500&fit=crop&s=967e8a713a4e395260793fc8c802901d); }
-    .panel4 { background-image:url(https://source.unsplash.com/ITjiVXcwVng/1500x1500); }
-    .panel5 { background-image:url(https://source.unsplash.com/3MNzGlQM7qs/1500x1500); }
+    .panel4 { background-image:url(https://i.pinimg.com/736x/91/38/c8/9138c8cb7a730dfbc7dc6ef7bd814353.jpg); }
+    .panel5 { background-image:url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmUVRox-fe9NaP-ZTdSmGU3CyJukD1d-hYAQ&s); }
 
     /* Flex Children */
     .panel > * {
       margin: 0;
       width: 100%;
       transition: transform 0.5s;
+      flex: 1 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
+    .panel > *:first-child 
+    {
+      transform: translateY(-100%);
+    }
+    .panel.open-active > *:first-child 
+    {
+      transform: translateY(0);
+    }
+    .panel > *:last-child 
+    {
+      transform: translateY(100%);
+    }
+    .panel.open-active > *:last-child
+    {
+      transform: translateY(0);
+    }
     .panel p {
       text-transform: uppercase;
       font-family: 'Amatic SC', cursive;
@@ -71,6 +95,7 @@
     }
 
     .panel.open {
+      flex: 5;
       font-size: 40px;
     }
 
@@ -106,6 +131,25 @@
   </div>
 
   <script>
+
+    const panels = document.querySelectorAll(".panel");
+
+    panels.forEach(panel => panel.addEventListener("click", toggleOpen));
+
+    panels.forEach(panel => panel.addEventListener("transitionend", toggleActive));
+
+    function toggleOpen()
+    {
+      this.classList.toggle("open");
+    }
+
+    function toggleActive(e)
+    {
+      if (e.propertyName.includes("flex"))
+      {
+        this.classList.toggle("open-active");
+      }
+    }
 
   </script>
 
