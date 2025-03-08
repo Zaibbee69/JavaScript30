@@ -8,6 +8,79 @@
 <body>
 <canvas id="draw" width="800" height="800"></canvas>
 <script>
+
+  // Getting the canvas and context in 2d
+  const canvas = document.querySelector("#draw");
+  const ctx = canvas.getContext("2d");
+
+  // Setting the canvas width and height to total screen
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  // Setting the color and line variation of our context
+  ctx.strokeStyle = "#BADA55";
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
+  ctx.lineWidth = 100;
+
+  // Setting up the initial coordinates and flag
+  let isDrawing = false;
+  let lastX = 0;
+  let lastY = 0;
+
+  // Variables for setting color and line width
+  let hue = 0;
+  let direction = true;
+
+  // Function to draw on the canvas
+  function draw(e)
+  {
+
+    // Making a check if not drawing
+    if (!isDrawing) return;
+
+    console.log(e);
+
+    // Setting the random colors and line width
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+    // All the drawing happens on ctx so beginning path
+    ctx.beginPath();
+
+    // Starting drawing from
+    ctx.moveTo(lastX, lastY);
+
+    // Ending drawing to
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+
+    // Updating coordinates
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+
+    // Incrementing colors
+    hue ++;
+
+    // Checking if hue doesn't over flow
+    if (hue >= 360) hue = 0;
+
+    // Making checks for line width
+    if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) direction = !direction;
+
+    if (direction) ctx.lineWidth ++;
+    else ctx.lineWidth --;
+  }
+
+  // Adding the event listeners to mouse moving on canvas
+  canvas.addEventListener("mousedown", (e) => {
+
+    // Updating the coordinates as soon as the mouse button is pressed
+    isDrawing = true;
+    [lastX, lastY] = [e.offsetX, e.offsetY];
+  });
+
+  canvas.addEventListener("mousemove", draw);
+  canvas.addEventListener("mouseup", () => isDrawing = false);
+  canvas.addEventListener("mouseout", () => isDrawing = false);
+
 </script>
 
 <style>
