@@ -96,7 +96,44 @@
     </div>
   </div>
 
-<script>
-</script>
+  <script>
+
+    // First selecting the checkboxes
+    const checkboxes = document.querySelectorAll(`.item input[type="checkbox"]`);
+  
+    let lastChecked;
+
+
+    // Function to select multiple drag boxes
+    function dragBoxes(e)
+    {
+      // Making a variable to check if an element has in between checkboxes
+      let inBetween = false;
+
+      // First checking that only shift key was pressed and that the box is checked
+      if (e.shiftKey && this.checked)
+      {
+        checkboxes.forEach(checkbox => {
+
+          // Checking if their are in between elements right now
+          if (checkbox === this || checkbox == lastChecked)
+          {
+            inBetween = !inBetween;
+          } 
+
+          // If any in between element detected check that box
+          if (inBetween) checkbox.checked = true;
+        });
+      }
+
+      // Setting the last checked for checkboxes
+      lastChecked = this;
+
+    }
+
+    // If any of the checkboxes is clicked we run a check
+    checkboxes.forEach(checkbox => checkbox.addEventListener("click", dragBoxes))
+
+  </script>
 </body>
 </html>
