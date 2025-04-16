@@ -7,6 +7,25 @@
     <link rel="icon" href="https://fav.farm/🔥" />
   </head>
   <body>
-    <script></script>
+    <script>
+
+      // Creating a array for storing and passcode
+      const pressed = [];
+      const secretCode = "zaibbee";
+
+      // Checking the keys pressed
+      window.addEventListener("keyup", (e) => {
+        
+        // Adding the key to the array
+        pressed.push(e.key);
+
+        // Making sure array has a fix limit
+        pressed.splice(-secretCode.length -1, pressed.length - secretCode.length);
+
+        // Checking if passed
+        if (pressed.join("").includes(secretCode)) cornify_add();
+      });
+
+    </script>
   </body>
 </html>
