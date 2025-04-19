@@ -79,3 +79,25 @@ h2 {
   outline: 0;
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
+
+button
+{
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #D1922B;
+  color: white;
+  border: none;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+button:hover
+{
+  background-color: #814D23;
+}
+
+button:active
+{
+  opacity: 0.9;
+}

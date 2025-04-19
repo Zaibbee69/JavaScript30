@@ -23,16 +23,128 @@
     <form class="add-items">
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
+      <button class="clear-btn" type="button">Clear</button>
+      <button class="check-btn" type="button">Check All</button>
+      <button class="uncheck-btn" type="reset">Uncheck All</button>
     </form>
   </div>
 
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  const items =  JSON.parse(localStorage.getItem("items"))  || [];
+
+  // Selecting my buttons
+  const clearBtn = addItems.querySelector(".clear-btn");
+  const checkBtn = addItems.querySelector(".check-btn");
+  const uncheckBtn = addItems.querySelector(".uncheck-btn");
+
+  function addItem(e)
+  {
+    // Preventing the default event making sure page doesn't reload
+    e.preventDefault();
+
+    // Getting the text from the input
+    const text = (this.querySelector("[name=item]")).value;
+
+    // Create an object of it
+    const item = {
+      text,
+      done: false
+    };
+
+    // Adding the item to array
+    items.push(item);
+
+    // Adding the items to our list in html
+    populateList(items, itemsList);
+
+    // Adding the list to my local storage
+    localStorage.setItem("items", JSON.stringify(items));
+
+    // Clearing the input tab
+    this.reset();
+  }
+
+  function populateList(plates = [], platesList)
+  {
+    // For each item in the plates array we render a new html component
+    platesList.innerHTML = plates.map ((plate, index) => {
+      return `
+        <li>
+          <input type="checkbox" data-index=${index} id="item${index}" ${plate.done ? "checked" : ""}/>
+          <label for="item${index}">${plate.text}</label>
+        </li>
+      `;
+    }).join("");
+  }
+
+  function toggleDone(e)
+  {
+    // Checking only input tags get passed through
+    if (!e.target.matches("input")) return;
+
+    const el = e.target
+    const index = el.dataset.index;
+
+    items[index].done = !items[index].done;
+
+    localStorage.setItem("items", JSON.stringify(items));
+
+    populateList(items, itemsList);
+  }
+
+  function toggleClear()
+  {
+    // Clear all the text from lists
+    itemsList.innerHTML = "<h2> All Clear! </h2>";
+
+    // Also removing data from the memory
+    localStorage.removeItem("item");
+
+    // Now clearing the array too
+    items.length = 0;
+  }
+
+  function toggleCheck()
+  {
+    // Mark all items as done
+    items.forEach(item => item.done = true);
+
+    // Populate the list
+    populateList(items, itemsList);
+
+    // Update localStorage
+    localStorage.setItem("items", JSON.stringify(items));
+  }
+
+  function toggleUncheck()
+  {
+    // Un marking all items
+    items.forEach(item => item.done = false);
+
+    // Populate the list
+    populateList(items, itemsList);
+
+    // Update localStorage
+    localStorage.setItem("items", JSON.stringify(items));
+  }
+
+  // Clear Check all Uncheck all
+
+  addItems.addEventListener("submit", addItem);
+
+  // Calling the function to populate list at page load
+  populateList(items, itemsList);
+
+  itemsList.addEventListener("click", toggleDone);
+
+  // Adding event listeners for buttons
+  clearBtn.addEventListener("click", toggleClear);
+  checkBtn.addEventListener("click", toggleCheck);
+  uncheckBtn.addEventListener("click", toggleUncheck);
 
 </script>
-
 
 </body>
 </html>
